@@ -1,0 +1,5 @@
+config ZMK_BEHAVIOR_MORSE
+    bool
+    default y
+    depends on DT_HAS_ZMK_BEHAVIOR_MORSE_ENABLED
+
