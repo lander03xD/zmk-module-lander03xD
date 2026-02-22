@@ -7,3 +7,7 @@ compatible: "zmk,behavior-morse"
 
 include: zero_param.yaml # Additional parameters
 
+properties: 
+	time-unit-ms:
+		type: int
+		required: true
