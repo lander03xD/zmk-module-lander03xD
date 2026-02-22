@@ -10,10 +10,11 @@
 #include <zephyr/device.h>
 #include <zephyr/logging/log.h>
 #include <drivers/behavior.h>
+#include <zmk/behavior.h>
+#include <dt-bindings/zmk/keys.h>
 
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
-#include <zmk/behavior.h>
 
 #if DT_HAS_COMPAT_STATUS_OKAY(DT_DRV_COMPAT)
 
@@ -38,19 +39,18 @@ static int morse_init(const struct device *dev) {
 
 static int on_morse_binding_pressed(struct zmk_behavior_binding *binding,
                                                  struct zmk_behavior_binding_event event) {
-    return ZMK_BEHAVIOR_OPAQUE;
+    return raise_zmk_keycode_state_changed_from_encoded(A, true, event.timestamp);
 }
 
 static int on_morse_binding_released(struct zmk_behavior_binding *binding,
                                                   struct zmk_behavior_binding_event event) {
-    return ZMK_BEHAVIOR_OPAQUE;
+    return  raise_zmk_keycode_state_changed_from_encoded(B, true, event.timestamp);;
 }
 
 // API struct
 static const struct behavior_driver_api morse_driver_api = {
     .binding_pressed = on_morse_binding_pressed,
     .binding_released = on_morse_binding_released,
-    .locality = BEHAVIOR_LOCALITY_CENTRAL,
 };
 
 BEHAVIOR_DT_INST_DEFINE(0,                                                // Instance Number (0)
@@ -58,7 +58,8 @@ BEHAVIOR_DT_INST_DEFINE(0,                                                // Ins
                         NULL,                                             // Power Management Device Pointer
                         &morse_data,                         // Behavior Data Pointer
                         &morse_config,                       // Behavior Configuration Pointer
-                        POST_KERNEL, CONFIG_KERNEL_INIT_PRIORITY_DEFAULT  // Initialization Level, Device Priority
+                        POST_KERNEL, 
+                        CONFIG_KERNEL_INIT_PRIORITY_DEFAULT  // Initialization Level, Device Priority
                         &morse_driver_api);                  // API struct
 
 #endif /* DT_HAS_COMPAT_STATUS_OKAY(DT_DRV_COMPAT) */

@@ -13,7 +13,7 @@
 #if ZMK_BEHAVIOR_OMIT(MORSE)
         /omit-if-no-ref/
 #endif
-        morse: grave_escape {
+        morse: morse_tap {
             compatible = "zmk,behavior-morse";
             #binding-cells = <0>;
             display-name = "Morse";
