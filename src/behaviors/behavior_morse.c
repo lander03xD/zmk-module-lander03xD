@@ -37,12 +37,6 @@ struct morse_mapping {
     uint8_t keycode; // HID keycode
 };
 
-
-struct morse_mapping {
-    const char *symbols;
-    uint8_t keycode; // HID keycode
-};
-
 static const struct morse_mapping morse_table[] = {
     {".-", HID_USAGE_KEY_KEYBOARD_A},
     {"-...", HID_USAGE_KEY_KEYBOARD_B},
