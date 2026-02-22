@@ -83,8 +83,8 @@ static const struct morse_mapping morse_table[] = {
 }; 
 
 static void emit_key(uint32_t keycode) {
-    raise_k_keycode_state_changed_from_encode(keycode, true, state.last_event_timestamp);
-    raise_k_keycode_state_changed_from_encode(keycode, false, state.last_event_timestamp); 
+    raise_zmk_keycode_state_changed_from_encoded(keycode, true, state.last_event_timestamp);
+    raise_zmk_keycode_state_changed_from_encoded(keycode, false, state.last_event_timestamp); 
 }
 
 static uint8_t lookup_morse(const char *buffer, uint8_t len) {
