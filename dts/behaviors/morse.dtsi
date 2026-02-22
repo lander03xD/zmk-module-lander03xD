@@ -17,7 +17,7 @@
             compatible = "zmk,behavior-morse";
             #binding-cells = <0>;
             display-name = "Morse";
-            time-unit-ms = 120;
+            time-unit-ms = <120>;
         };
     };
 };
