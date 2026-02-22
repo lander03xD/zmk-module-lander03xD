@@ -23,9 +23,12 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #define MAX_SYMBOLS 6 
 
 struct morse_state { 
+    // morse buffer
     char buffer[MAX_SYMBOLS]; //buffer of collected dots and dashes
     uint8_t count; //amount of dots and dashes
+    // timings
     int64_t last_release_time; 
+    //work 
     struct k_work_delayable flush_letter_work; // no clue
     struct k_work_delayable flush_word_work; // no clue   
 };
@@ -94,17 +97,17 @@ static void flush_letter(struct k_work *work) {
 
     uint8_t keycode = lookup_morse(state.buffer, state.count);
     if (keycode) {
-        zmk_hid_keypress(keycode); //todo this is wrong code, this doesn't exist in zmk
+        raise_k_keycode_state_changed_from_encode(keycode, true, event_timestamp); // put the proper usage of this code later on I guess, you know what to do, you're a smart cookie! Good luck!
         zmk_hid_keyrelease(keycode); //todo this is wrong code, this doesn't exist in zmk
     } else {
         // Invalid sequence: output literal dots/dashes
         for (uint8_t i = 0; i < state.count; i++) {
             if (state.buffer[i] == '.') {
-                zmk_hid_keypress(HID_USAGE_KEY_KEYBOARD_PERIOD);
-                zmk_hid_keyrelease(HID_USAGE_KEY_KEYBOARD_PERIOD);
+                zmk_hid_keypress(HID_USAGE_KEY_KEYBOARD_PERIOD_AND_GREATER_THAN);
+                zmk_hid_keyrelease(HID_USAGE_KEY_KEYBOARD_PERIOD_AND_GREATER_THAN);
             } else if (state.buffer[i] == '-') {
-                zmk_hid_keypress(HID_USAGE_KEY_KEYBOARD_MINUS);
-                zmk_hid_keyrelease(HID_USAGE_KEY_KEYBOARD_MINUS);
+                zmk_hid_keypress(HID_USAGE_KEY_KEYBOARD_MINUS_AND_UNDERSCORE);
+                zmk_hid_keyrelease(HID_USAGE_KEY_KEYBOARD_MINUS_AND_UNDERSCORE);
             }
         }
     }
