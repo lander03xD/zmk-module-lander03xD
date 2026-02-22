@@ -59,7 +59,7 @@ BEHAVIOR_DT_INST_DEFINE(0,                                                // Ins
                         &morse_data,                         // Behavior Data Pointer
                         &morse_config,                       // Behavior Configuration Pointer
                         POST_KERNEL, 
-                        CONFIG_KERNEL_INIT_PRIORITY_DEFAULT  // Initialization Level, Device Priority
+                        CONFIG_KERNEL_INIT_PRIORITY_DEFAULT,  // Initialization Level, Device Priority
                         &morse_driver_api);                  // API struct
 
 #endif /* DT_HAS_COMPAT_STATUS_OKAY(DT_DRV_COMPAT) */
