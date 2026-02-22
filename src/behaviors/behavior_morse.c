@@ -14,6 +14,7 @@
 #include <dt-bindings/zmk/keys.h>
 #include <zmk/events/keycode_state_changed.h>
 #include <zephyr/sys/util.h> //for ARG_UNUSED(work);
+#include <string.h> // for string compare
 
 
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
@@ -21,7 +22,7 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #if DT_HAS_COMPAT_STATUS_OKAY(DT_DRV_COMPAT)
 
 #define MAX_SYMBOLS 6 
-#define MORSE_TIME_UNIT DT_INST_PROP(0, time_unit_ms); 
+#define MORSE_TIME_UNIT DT_INST_PROP(0, time_unit_ms)
 
 struct morse_state { 
     // morse buffer
@@ -93,7 +94,7 @@ static uint8_t lookup_morse(const char *buffer, uint8_t len) {
             return morse_table[i].keycode;
         }
     }
-    return false;
+    return 0;
 }
 static void flush_letter_now(void) {
     if (state.count == 0) {
@@ -101,14 +102,14 @@ static void flush_letter_now(void) {
     }
     uint8_t keycode = lookup_morse(state.buffer, state.count);
     if (keycode) {
-        emit_key(keycode)
+        emit_key(keycode);
     } else {
         // Invalid sequence: output literal dots/dashes
         for (uint8_t i = 0; i < state.count; i++) {
             if (state.buffer[i] == '.') {
-                emit_key(KP_DOT)
+                emit_key(KP_DOT);
             } else if (state.buffer[i] == '-') {
-                emit_key(KP_MINUS)
+                emit_key(KP_MINUS);
             }
         }
     }
@@ -117,14 +118,14 @@ static void flush_letter_now(void) {
 
 
 static void flush_letter(struct k_work *work) {
-    ARG_UNUSED(work)
-    flush_letter_now()
+    ARG_UNUSED(work);
+    flush_letter_now();
 }
 
 static void flush_word(struct k_work *work) {
-    ARG_UNUSED(work)
+    ARG_UNUSED(work);
     if (state.count == 0) {
-        emit_key(SPACE)
+        emit_key(SPACE);
     }
 }
 
@@ -136,7 +137,7 @@ static void schedule_flush() {
 static void on_morse_binding_pressed(struct zmk_behavior_binding *binding,
                                                  struct zmk_behavior_binding_event event) {
     state.last_event_timestamp = event.timestamp;
-    state.press_start_time = event.timestamp:
+    state.press_start_time = event.timestamp;
     // Cancel pending flushes while key is pressed
     k_work_cancel_delayable(&state.flush_letter_work);
     k_work_cancel_delayable(&state.flush_word_work);
@@ -145,12 +146,10 @@ static void on_morse_binding_pressed(struct zmk_behavior_binding *binding,
 static void on_morse_binding_released(struct zmk_behavior_binding *binding,
                                                   struct zmk_behavior_binding_event event) {
     state.last_event_timestamp = event.timestamp;
-    int64_t duration = event.timestamp - event.timestamp:
+    int64_t duration = event.timestamp - state.press_start_time;
     
-
-
     if (state.count < MAX_SYMBOLS) {
-        if (duration < 2 * unit) {
+        if (duration < 2 * MORSE_TIME_UNIT) {
             state.buffer[state.count++] = '.';
         } else {
             state.buffer[state.count++] = '-';
@@ -161,7 +160,7 @@ static void on_morse_binding_released(struct zmk_behavior_binding *binding,
     	k_work_cancel_delayable(&state.flush_letter_work);
     	k_work_cancel_delayable(&state.flush_word_work);
     }
-    state.last_event_timestamp = event.timestamp;
+    
     schedule_flush();
 }
 
@@ -171,8 +170,15 @@ static const struct behavior_driver_api morse_driver_api = {
     .binding_released = on_morse_binding_released,
 };
 
+static int morse_init(const struct device *dev) {
+    ARG_UNUSED(dev);
+    k_work_init_delayable(&state.flush_letter_work, flush_letter);
+    k_work_init_delayable(&state.flush_word_work, flush_word);
+    return 0;
+}
+
 BEHAVIOR_DT_INST_DEFINE(0,                                                // Instance Number (0)
-                        NULL,                          // Initialization Function
+                        morse_init,                          // Initialization Function
                         NULL,                                             // Power Management Device Pointer
                         NULL,                         // Behavior Data Pointer
                         NULL,                       // Behavior Configuration Pointer
@@ -180,8 +186,9 @@ BEHAVIOR_DT_INST_DEFINE(0,                                                // Ins
                         CONFIG_KERNEL_INIT_PRIORITY_DEFAULT,  // Initialization Level, Device Priority
                         &morse_driver_api);                  // API struct
                         
-K_WORK_DELAYABLE_DEFINE(state.flush_letter_work, flush_letter);
-K_WORK_DELAYABLE_DEFINE(state.flush_word_work, flush_word);
+                    
+//K_WORK_DELAYABLE_DEFINE(state.flush_letter_work, flush_letter); //to be removed?
+//K_WORK_DELAYABLE_DEFINE(state.flush_word_work, flush_word); //to be removed?
 
 #endif /* DT_HAS_COMPAT_STATUS_OKAY(DT_DRV_COMPAT) */
 
