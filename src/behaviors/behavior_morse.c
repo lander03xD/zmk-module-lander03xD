@@ -12,6 +12,7 @@
 #include <drivers/behavior.h>
 #include <zmk/behavior.h>
 #include <dt-bindings/zmk/keys.h>
+#include <zmk/events/keycode_state_changed.h>
 
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
