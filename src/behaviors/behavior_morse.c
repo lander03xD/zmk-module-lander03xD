@@ -120,6 +120,7 @@ static void flush_letter_now(void) {
 static void flush_letter(struct k_work *work) {
     ARG_UNUSED(work);
     flush_letter_now();
+    k_work_reschedule(&state.flush_word_work, K_MSEC(MORSE_TIME_UNIT * 7));
 }
 
 static void flush_word(struct k_work *work) {
@@ -131,7 +132,6 @@ static void flush_word(struct k_work *work) {
 
 static void schedule_flush() {
     k_work_reschedule(&state.flush_letter_work, K_MSEC(MORSE_TIME_UNIT * 3));
-    k_work_reschedule(&state.flush_word_work, K_MSEC(MORSE_TIME_UNIT * 7));
 }
 
 static void on_morse_binding_pressed(struct zmk_behavior_binding *binding,
