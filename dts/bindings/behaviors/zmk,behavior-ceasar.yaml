@@ -11,4 +11,3 @@ properties:
   rotation:
     type: int
     default: 17
-    required: true
