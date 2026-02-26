@@ -186,9 +186,5 @@ BEHAVIOR_DT_INST_DEFINE(0,                                                // Ins
                         CONFIG_KERNEL_INIT_PRIORITY_DEFAULT,  // Initialization Level, Device Priority
                         &morse_driver_api);                  // API struct
                         
-                    
-//K_WORK_DELAYABLE_DEFINE(state.flush_letter_work, flush_letter); //to be removed?
-//K_WORK_DELAYABLE_DEFINE(state.flush_word_work, flush_word); //to be removed?
-
 #endif /* DT_HAS_COMPAT_STATUS_OKAY(DT_DRV_COMPAT) */
 

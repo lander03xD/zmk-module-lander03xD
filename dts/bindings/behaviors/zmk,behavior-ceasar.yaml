@@ -1,0 +1,14 @@
+# Copyright (c) 2020 The ZMK Contributors
+# SPDX-License-Identifier: MIT
+
+description: Ceasar Encryption Behavior
+
+compatible: "zmk,behavior-ceasar"
+
+include: zero_param.yaml # Additional parameters
+
+properties: 
+  rotation:
+    type: int
+    default: 17
+    required: true

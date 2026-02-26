@@ -1,0 +1,17 @@
+docs: https://v0-3-branch.zmk.dev/docs/development/new-behavior#api-structure
+
+DeviceTree Binding
+> create the yaml at /dts/bindings/behaviors/zmk,behavior_name.yaml
+here we define the name
+the amount of parameters used (0, 1 or 2)
+and the properties for the config
+properties have a mandatory type, a required field, a default option and enums for allowed entries
+
+Next we create a an optional common usecase for the behavior
+create a dtsi file in /dts/behaviors/behaviorname.dtsi
+Here we define a behavior of our new behavior type if we want to have one or a small amount of  common usecases as if you're maknig the behaviour in your keymap
+
+everything in dts folder is good now 
+
+Then we create the driver. This is the C code that will actually do the work.
+
