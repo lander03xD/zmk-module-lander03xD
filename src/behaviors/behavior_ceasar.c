@@ -30,12 +30,12 @@ struct ceasar_state {
 static struct ceasar_state state = { .encryption_active = false } ;
 
 static uint32_t caesar_transform(uint32_t keycode) {
-    uint8_t usage = zmk_hid_get_usage_id(keycode);
+    uint32_t usage = zmk_hid_get_usage_id(keycode);  // Already uint32_t
 
     if (usage >= HID_USAGE_KEY_A && usage <= HID_USAGE_KEY_Z) {
-        uint8_t offset = usage - HID_USAGE_KEY_A;
-        uint8_t rotated = (offset + ROT) % 26;
-        uint8_t new_usage = HID_USAGE_KEY_A + rotated;
+        uint32_t offset = usage - HID_USAGE_KEY_A;
+        uint32_t rotated = (offset + ROT) % 26;
+        uint32_t new_usage = HID_USAGE_KEY_A + rotated;
 
         return zmk_hid_keycode_from_usage(new_usage);
     }
