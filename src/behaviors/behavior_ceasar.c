@@ -14,6 +14,7 @@
 #include <zmk/events/keycode_state_changed.h>
 #include <zmk/event_manager.h>
 #include <zmk/split/bluetooth/service.h>
+#include <zmk/hid.h>
 
 
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
@@ -29,14 +30,14 @@ struct ceasar_state {
 static struct ceasar_state state = { .encryption_active = false } ;
 
 static uint32_t caesar_transform(uint32_t keycode) {
-    uint8_t usage = keycode & HID_USAGE_ID_MASK;
+    uint8_t usage = zmk_hid_get_usage_id(keycode);
 
     if (usage >= HID_USAGE_KEY_A && usage <= HID_USAGE_KEY_Z) {
         uint8_t offset = usage - HID_USAGE_KEY_A;
         uint8_t rotated = (offset + ROT) % 26;
         uint8_t new_usage = HID_USAGE_KEY_A + rotated;
 
-        keycode = (keycode & ~HID_USAGE_ID_MASK) | new_usage;
+        return zmk_hid_keycode_from_usage(new_usage);
     }
 
     return keycode;
