@@ -40,7 +40,7 @@ static struct morse_state state;
 
 struct morse_mapping {
     const char *symbols;
-    uint32_t keycode; // HID keycode
+    uint8_t keycode; // HID keycode
 };
 
 static const struct morse_mapping morse_table[] = {
