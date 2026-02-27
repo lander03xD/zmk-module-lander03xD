@@ -14,7 +14,7 @@
 #include <zmk/event_manager.h>
 #include <zmk/split/bluetooth/service.h>
 #include <zmk/hid.h>
-#include <zmk/hid_usage.h>  // <-- Added for HID_USAGE_KEY_A/Z
+#include <dt-bindings/zmk/hid_usage.h>  // <-- Added for HID_USAGE_KEY_A/Z
 
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
