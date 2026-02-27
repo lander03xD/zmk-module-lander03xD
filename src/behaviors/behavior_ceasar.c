@@ -67,13 +67,12 @@ static int caesar_listener(const zmk_event_t *eh) {
     return ZMK_EV_EVENT_HANDLED;
 }
 
-ZMK_LISTENER(caesar, caesar_listener);
-ZMK_SUBSCRIPTION(caesar, zmk_keycode_state_changed);
+//ZMK_LISTENER(caesar, caesar_listener);
+//ZMK_SUBSCRIPTION(caesar, zmk_keycode_state_changed);
 
 static void on_caesar_binding_pressed(struct zmk_behavior_binding *binding,
                                       struct zmk_behavior_binding_event event) {
     state.encryption_active = !state.encryption_active;
-    LOG_INF("Caesar encryption %s", state.encryption_active ? "enabled" : "disabled");
 }
 
 // API struct
