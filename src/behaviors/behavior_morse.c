@@ -134,16 +134,17 @@ static void schedule_flush() {
     k_work_reschedule(&state.flush_letter_work, K_MSEC(MORSE_TIME_UNIT * 3));
 }
 
-static void on_morse_binding_pressed(struct zmk_behavior_binding *binding,
+static int on_morse_binding_pressed(struct zmk_behavior_binding *binding,
                                                  struct zmk_behavior_binding_event event) {
     state.last_event_timestamp = event.timestamp;
     state.press_start_time = event.timestamp;
     // Cancel pending flushes while key is pressed
     k_work_cancel_delayable(&state.flush_letter_work);
     k_work_cancel_delayable(&state.flush_word_work);
+    return 0; //success
 }
 
-static void on_morse_binding_released(struct zmk_behavior_binding *binding,
+static int on_morse_binding_released(struct zmk_behavior_binding *binding,
                                                   struct zmk_behavior_binding_event event) {
     state.last_event_timestamp = event.timestamp;
     int64_t duration = event.timestamp - state.press_start_time;
@@ -162,6 +163,7 @@ static void on_morse_binding_released(struct zmk_behavior_binding *binding,
     }
     
     schedule_flush();
+    return 0; //success
 }
 
 // API struct
