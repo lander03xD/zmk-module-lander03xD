@@ -10,4 +10,4 @@ include: zero_param.yaml # Additional parameters
 properties: 
   rotation:
     type: int
-    default: 2
+    default: 17
