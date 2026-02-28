@@ -66,6 +66,9 @@ static int ceasar_listener(const zmk_event_t *eh) {
 
     // Emit the transformed event
     zmk_event_manager_raise(&new_ev);
+    
+    raise_zmk_keycode_state_changed_from_encoded(C, true, event.timestamp);
+    raise_zmk_keycode_state_changed_from_encoded(C, false, event.timestamp); 
 
 
     return ZMK_EV_EVENT_HANDLED;
