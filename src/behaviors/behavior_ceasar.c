@@ -60,16 +60,8 @@ static int ceasar_listener(const zmk_event_t *eh) {
         return ZMK_EV_EVENT_BUBBLE;
     }
 
-    // Create a modified keycode event instead of modifying the original
-    struct zmk_keycode_state_changed new_ev = *ev;
-    new_ev.keycode = ceasar_transform(ev->keycode);
-
-    // Emit the transformed event
-    zmk_event_manager_raise(&new_ev);
-    
-    raise_zmk_keycode_state_changed_from_encoded(C, true, event.timestamp);
-    raise_zmk_keycode_state_changed_from_encoded(C, false, event.timestamp); 
-
+    uint32_t new_keycode = ceasar_transform(ev->keycode);
+    raise_zmk_keycode_state_changed_from_encoded(new_keycode, ev->state, ev->timestamp);
 
     return ZMK_EV_EVENT_HANDLED;
 }
