@@ -90,7 +90,7 @@ static uint32_t ceasar_transform(uint32_t keycode) {
         uint32_t offset = usage - HID_USAGE_KEY_KEYBOARD_A;
         uint32_t rotated = (offset + ROT) % 26;
         uint32_t new_usage = HID_USAGE_KEY_KEYBOARD_A + rotated;
-        return dvorak_to_qwerty(new_usage);
+        return qwerty_to_dvorak(new_usage);
     }
 
     return keycode;
