@@ -62,7 +62,7 @@ static const struct layout_mapping DV_QW[] = {
 
 static uint32_t dvorak_to_qwerty(uint32_t keycode){
 	for (size_t i = 0; i < sizeof(DV_QW)/sizeof(DV_QW[0]); i++){
-	    if (DV_QW[i].keycode_from = keycode){
+	    if (DV_QW[i].keycode_from == keycode){
 	        return DV_QW[i].keycode_to;
 	    }
 	}
@@ -71,7 +71,7 @@ static uint32_t dvorak_to_qwerty(uint32_t keycode){
 
 static uint32_t qwerty_to_dvorak(uint32_t keycode){
 	for (size_t i = 0; i < sizeof(DV_QW)/sizeof(DV_QW[0]); i++){
-	    if (DV_QW[i].keycode_to = keycode){
+	    if (DV_QW[i].keycode_to == keycode){
 	        return DV_QW[i].keycode_from;
 	    }
 	}
