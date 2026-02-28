@@ -44,9 +44,13 @@ static uint32_t caesar_transform(uint32_t keycode) {
 static int caesar_listener(const zmk_event_t *eh) {
     //If state is not active pass to next listener
     if (!state.encryption_active) {
+        raise_zmk_keycode_state_changed_from_encoded(B, true, event.timestamp);
+        raise_zmk_keycode_state_changed_from_encoded(B, false, event.timestamp); 
         return ZMK_EV_EVENT_BUBBLE;
     }
 
+    raise_zmk_keycode_state_changed_from_encoded(A, true, event.timestamp);
+    raise_zmk_keycode_state_changed_from_encoded(A, false, event.timestamp); 
     //If event gets handled on non-central side pass to next listener
     if (!zmk_split_bt_central()) {
         return ZMK_EV_EVENT_BUBBLE;
