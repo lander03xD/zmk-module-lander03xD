@@ -24,9 +24,12 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 struct ceasar_state { 
     bool encryption_active;
+    bool last_key_state;
 };
 
-static struct ceasar_state state = { .encryption_active = false };
+static struct ceasar_state state = { 
+.encryption_active = false,
+.last_event_state = false };
 
 static uint32_t ceasar_transform(uint32_t keycode) {
     uint32_t usage = keycode;// zmk_hid_get_usage_id(keycode);
@@ -46,10 +49,6 @@ static int ceasar_listener(const zmk_event_t *eh) {
     if (!state.encryption_active) {
         return ZMK_EV_EVENT_BUBBLE;
     }
-    //If event gets handled on non-central side pass to next listener
-    //if (!zmk_split_bt_central()) {
-    //    return ZMK_EV_EVENT_BUBBLE;
-    //}
 
     //Check if event is a keycode state change
     const struct zmk_keycode_state_changed *ev =
@@ -59,8 +58,13 @@ static int ceasar_listener(const zmk_event_t *eh) {
     if (!ev) {
         return ZMK_EV_EVENT_BUBBLE;
     }
+    
+    if (ev->state == state.last_event_state) {
+        return ZMK_EV_EVENT_BUBBLE;
+    }
 
     uint32_t new_keycode = ceasar_transform(ev->keycode);
+    state.last_event_state = ev->state;
     raise_zmk_keycode_state_changed_from_encoded(new_keycode, ev->state, ev->timestamp);
 
     return ZMK_EV_EVENT_HANDLED;
@@ -69,7 +73,7 @@ static int ceasar_listener(const zmk_event_t *eh) {
 ZMK_LISTENER(ceasar, ceasar_listener);
 ZMK_SUBSCRIPTION(ceasar, zmk_keycode_state_changed);
 
-static void on_ceasar_binding_pressed(struct zmk_behavior_binding *binding,
+static void on_ceasar_binding_released(struct zmk_behavior_binding *binding,
                                       struct zmk_behavior_binding_event event) {
     //testing code
     if (state.encryption_active){
@@ -84,7 +88,7 @@ static void on_ceasar_binding_pressed(struct zmk_behavior_binding *binding,
 
 // API struct
 static const struct behavior_driver_api ceasar_driver_api = {
-    .binding_pressed = on_ceasar_binding_pressed,
+    .binding_released = on_ceasar_binding_released,
 };
 
 BEHAVIOR_DT_INST_DEFINE(0,
