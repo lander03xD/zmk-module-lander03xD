@@ -84,13 +84,13 @@ static struct ceasar_state state = {
 
 static uint32_t ceasar_transform(uint32_t keycode) {
 
-    uint32_t usage = dvorak_to_qwerty(keycode);
+    uint32_t usage = qwerty_to_dvorak(keycode);
 
     if (usage >= HID_USAGE_KEY_KEYBOARD_A && usage <= HID_USAGE_KEY_KEYBOARD_Z) {
         uint32_t offset = usage - HID_USAGE_KEY_KEYBOARD_A;
         uint32_t rotated = (offset + ROT) % 26;
         uint32_t new_usage = HID_USAGE_KEY_KEYBOARD_A + rotated;
-        return qwerty_to_dvorak(new_usage);
+        return dvorak_to_qwerty(new_usage);
     }
 
     return keycode;
