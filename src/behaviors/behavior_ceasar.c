@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-#define DT_DRV_COMPAT zmk_behavior_caesar
+#define DT_DRV_COMPAT zmk_behavior_ceasar
 
 #include <zephyr/logging/log.h>
 #include <drivers/behavior.h>
@@ -22,13 +22,13 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 #define ROT DT_INST_PROP(0, rotation)
 
-struct caesar_state { 
+struct ceasar_state { 
     bool encryption_active;
 };
 
-static struct caesar_state state = { .encryption_active = false };
+static struct ceasar_state state = { .encryption_active = false };
 
-static uint32_t caesar_transform(uint32_t keycode) {
+static uint32_t ceasar_transform(uint32_t keycode) {
     uint32_t usage = zmk_hid_get_usage_id(keycode);
 
     if (usage >= HID_USAGE_KEY_A && usage <= HID_USAGE_KEY_Z) {
@@ -41,16 +41,11 @@ static uint32_t caesar_transform(uint32_t keycode) {
     return keycode;
 }
 
-static int caesar_listener(const zmk_event_t *eh) {
+static int ceasar_listener(const zmk_event_t *eh) {
     //If state is not active pass to next listener
     if (!state.encryption_active) {
-        raise_zmk_keycode_state_changed_from_encoded(B, true, event.timestamp);
-        raise_zmk_keycode_state_changed_from_encoded(B, false, event.timestamp); 
         return ZMK_EV_EVENT_BUBBLE;
     }
-
-    raise_zmk_keycode_state_changed_from_encoded(A, true, event.timestamp);
-    raise_zmk_keycode_state_changed_from_encoded(A, false, event.timestamp); 
     //If event gets handled on non-central side pass to next listener
     if (!zmk_split_bt_central()) {
         return ZMK_EV_EVENT_BUBBLE;
@@ -67,7 +62,7 @@ static int caesar_listener(const zmk_event_t *eh) {
 
     // Create a modified keycode event instead of modifying the original
     struct zmk_keycode_state_changed new_ev = *ev;
-    new_ev.keycode = caesar_transform(ev->keycode);
+    new_ev.keycode = ceasar_transform(ev->keycode);
 
     // Emit the transformed event
     zmk_event_manager_raise(&new_ev);
@@ -76,10 +71,10 @@ static int caesar_listener(const zmk_event_t *eh) {
     return ZMK_EV_EVENT_HANDLED;
 }
 
-ZMK_LISTENER(caesar, caesar_listener);
-ZMK_SUBSCRIPTION(caesar, zmk_keycode_state_changed);
+ZMK_LISTENER(ceasar, ceasar_listener);
+ZMK_SUBSCRIPTION(ceasar, zmk_keycode_state_changed);
 
-static void on_caesar_binding_pressed(struct zmk_behavior_binding *binding,
+static void on_ceasar_binding_pressed(struct zmk_behavior_binding *binding,
                                       struct zmk_behavior_binding_event event) {
     //testing code
     if (state.encryption_active){
@@ -93,8 +88,8 @@ static void on_caesar_binding_pressed(struct zmk_behavior_binding *binding,
 }
 
 // API struct
-static const struct behavior_driver_api caesar_driver_api = {
-    .binding_pressed = on_caesar_binding_pressed,
+static const struct behavior_driver_api ceasar_driver_api = {
+    .binding_pressed = on_ceasar_binding_pressed,
 };
 
 BEHAVIOR_DT_INST_DEFINE(0,
@@ -104,6 +99,6 @@ BEHAVIOR_DT_INST_DEFINE(0,
                         NULL,
                         POST_KERNEL,
                         CONFIG_KERNEL_INIT_PRIORITY_DEFAULT,
-                        &caesar_driver_api);
+                        &ceasar_driver_api);
 
 #endif /* DT_HAS_COMPAT_STATUS_OKAY(DT_DRV_COMPAT) */
