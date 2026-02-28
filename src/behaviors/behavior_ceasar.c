@@ -42,17 +42,21 @@ static uint32_t caesar_transform(uint32_t keycode) {
 }
 
 static int caesar_listener(const zmk_event_t *eh) {
+    //If state is not active pass to next listener
     if (!state.encryption_active) {
         return ZMK_EV_EVENT_BUBBLE;
     }
 
+    //If event gets handled on non-central side pass to next listener
     if (!zmk_split_bt_central()) {
         return ZMK_EV_EVENT_BUBBLE;
     }
 
+    //Check if event is a keycode state change
     const struct zmk_keycode_state_changed *ev =
         as_zmk_keycode_state_changed(eh);
 
+    //If not the correct event, pass it to the next listener
     if (!ev) {
         return ZMK_EV_EVENT_BUBBLE;
     }
@@ -64,6 +68,7 @@ static int caesar_listener(const zmk_event_t *eh) {
     // Emit the transformed event
     zmk_event_manager_raise(&new_ev);
 
+
     return ZMK_EV_EVENT_HANDLED;
 }
 
@@ -72,6 +77,14 @@ ZMK_SUBSCRIPTION(caesar, zmk_keycode_state_changed);
 
 static void on_caesar_binding_pressed(struct zmk_behavior_binding *binding,
                                       struct zmk_behavior_binding_event event) {
+    //testing code
+    if (state.encryption_active){
+        raise_zmk_keycode_state_changed_from_encoded(A, true, event.timestamp);
+        raise_zmk_keycode_state_changed_from_encoded(A, false, event.timestamp); 
+    } else {
+        raise_zmk_keycode_state_changed_from_encoded(B, true, event.timestamp);
+        raise_zmk_keycode_state_changed_from_encoded(B, false, event.timestamp); 
+    }
     state.encryption_active = !state.encryption_active;
 }
 
