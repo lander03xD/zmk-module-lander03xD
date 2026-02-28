@@ -29,13 +29,13 @@ struct ceasar_state {
 static struct ceasar_state state = { .encryption_active = false };
 
 static uint32_t ceasar_transform(uint32_t keycode) {
-    uint32_t usage = zmk_hid_get_usage_id(keycode);
+    uint32_t usage = keycode;// zmk_hid_get_usage_id(keycode);
 
     if (usage >= HID_USAGE_KEY_KEYBOARD_A && usage <= HID_USAGE_KEY_KEYBOARD_Z) {
         uint32_t offset = usage - HID_USAGE_KEY_KEYBOARD_A;
         uint32_t rotated = (offset + ROT) % 26;
         uint32_t new_usage = HID_USAGE_KEY_KEYBOARD_A + rotated;
-        return zmk_hid_keycode_from_usage(new_usage);
+        return new_usage;//zmk_hid_keycode_from_usage(new_usage);
     }
 
     return keycode;
@@ -47,9 +47,9 @@ static int ceasar_listener(const zmk_event_t *eh) {
         return ZMK_EV_EVENT_BUBBLE;
     }
     //If event gets handled on non-central side pass to next listener
-    if (!zmk_split_bt_central()) {
-        return ZMK_EV_EVENT_BUBBLE;
-    }
+    //if (!zmk_split_bt_central()) {
+    //    return ZMK_EV_EVENT_BUBBLE;
+    //}
 
     //Check if event is a keycode state change
     const struct zmk_keycode_state_changed *ev =
