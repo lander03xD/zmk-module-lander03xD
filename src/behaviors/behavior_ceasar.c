@@ -24,7 +24,7 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 struct ceasar_state { 
     bool encryption_active;
-    bool last_key_state;
+    bool last_event_state;
 };
 
 static struct ceasar_state state = { 
