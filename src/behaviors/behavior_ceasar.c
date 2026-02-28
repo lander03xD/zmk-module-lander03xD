@@ -80,7 +80,7 @@ static uint32_t qwerty_to_dvorak(uint32_t keycode){
 
 static struct ceasar_state state = { 
 .encryption_active = false,
-.last_event_state = false };
+.transforming = false };
 
 static uint32_t ceasar_transform(uint32_t keycode) {
 
@@ -115,9 +115,6 @@ static int ceasar_listener(const zmk_event_t *eh) {
         return ZMK_EV_EVENT_BUBBLE;
     }
     
-    if (ev->state == state.last_event_state) {
-        return ZMK_EV_EVENT_BUBBLE;
-    }
     state.transforming = true;
     raise_zmk_keycode_state_changed_from_encoded(ceasar_transform(ev->keycode), ev->state, ev->timestamp);
     state.transforming = false;
