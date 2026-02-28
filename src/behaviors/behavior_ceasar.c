@@ -102,7 +102,7 @@ static int ceasar_listener(const zmk_event_t *eh) {
         return ZMK_EV_EVENT_BUBBLE;
     }
     
-    if (!state.transforming) {
+    if (state.transforming) {
         return ZMK_EV_EVENT_BUBBLE;
     }
 
