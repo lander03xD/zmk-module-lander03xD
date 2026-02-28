@@ -24,7 +24,7 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 struct ceasar_state { 
     bool encryption_active;
-    bool last_event_state;
+    bool transforming;
 };
 struct layout_mapping {
     uint32_t keycode_from;
@@ -101,6 +101,10 @@ static int ceasar_listener(const zmk_event_t *eh) {
     if (!state.encryption_active) {
         return ZMK_EV_EVENT_BUBBLE;
     }
+    
+    if (!state.transforming) {
+        return ZMK_EV_EVENT_BUBBLE;
+    }
 
     //Check if event is a keycode state change
     const struct zmk_keycode_state_changed *ev =
@@ -114,10 +118,9 @@ static int ceasar_listener(const zmk_event_t *eh) {
     if (ev->state == state.last_event_state) {
         return ZMK_EV_EVENT_BUBBLE;
     }
-
-    uint32_t new_keycode = ceasar_transform(ev->keycode);
-    state.last_event_state = ev->state;
-    raise_zmk_keycode_state_changed_from_encoded(new_keycode, ev->state, ev->timestamp);
+    state.transforming = true;
+    raise_zmk_keycode_state_changed_from_encoded(ceasar_transform(ev->keycode), ev->state, ev->timestamp);
+    state.transforming = false;
 
     return ZMK_EV_EVENT_HANDLED;
 }
@@ -127,14 +130,6 @@ ZMK_SUBSCRIPTION(ceasar, zmk_keycode_state_changed);
 
 static void on_ceasar_binding_released(struct zmk_behavior_binding *binding,
                                       struct zmk_behavior_binding_event event) {
-    //testing code
-    if (state.encryption_active){
-        raise_zmk_keycode_state_changed_from_encoded(A, true, event.timestamp);
-        raise_zmk_keycode_state_changed_from_encoded(A, false, event.timestamp); 
-    } else {
-        raise_zmk_keycode_state_changed_from_encoded(B, true, event.timestamp);
-        raise_zmk_keycode_state_changed_from_encoded(B, false, event.timestamp); 
-    }
     state.encryption_active = !state.encryption_active;
 }
 
