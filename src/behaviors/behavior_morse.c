@@ -88,7 +88,7 @@ static void emit_key(uint32_t keycode) {
     raise_zmk_keycode_state_changed_from_encoded(keycode, false, state.last_event_timestamp); 
 }
 
-static uint8_t lookup_morse(const char *buffer, uint8_t len) {
+static uint32_t lookup_morse(const char *buffer, uint8_t len) {
     for (size_t i = 0; i < sizeof(morse_table)/sizeof(morse_table[0]); i++) {
         if (strncmp(morse_table[i].symbols, buffer, len) == 0 &&
             morse_table[i].symbols[len] == '\0') {
@@ -101,7 +101,7 @@ static void flush_letter_now(void) {
     if (state.count == 0) {
         return;
     }
-    uint8_t keycode = lookup_morse(state.buffer, state.count);
+    uint32_t keycode = lookup_morse(state.buffer, state.count);
     if (keycode) {
         emit_key(keycode);
     } else {
