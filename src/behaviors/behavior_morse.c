@@ -92,7 +92,7 @@ static uint32_t lookup_morse(const char *buffer, uint8_t len) {
     for (size_t i = 0; i < sizeof(morse_table)/sizeof(morse_table[0]); i++) {
         if (strncmp(morse_table[i].symbols, buffer, len) == 0 &&
             morse_table[i].symbols[len] == '\0') {
-            return qwerty_to_dvorak(morse_table[i].keycode);
+            return dvorak_to_qwerty(morse_table[i].keycode);
         }
     }
     return 0;
