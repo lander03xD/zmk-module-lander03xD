@@ -1,4 +1,5 @@
 #include <stddef.h>
+#include <stdint.h>
 #include <dt-bindings/zmk/hid_usage.h>
 
 struct layout_mapping {
