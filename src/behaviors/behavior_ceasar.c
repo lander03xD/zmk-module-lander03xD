@@ -78,6 +78,7 @@ ZMK_SUBSCRIPTION(ceasar, zmk_keycode_state_changed);
 static int on_ceasar_binding_released(struct zmk_behavior_binding *binding,
                                       struct zmk_behavior_binding_event event) {
     state.encryption_active = !state.encryption_active;
+    return 0; //success
 }
 
 // API struct
