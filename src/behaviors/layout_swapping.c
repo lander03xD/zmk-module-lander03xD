@@ -1,6 +1,5 @@
 #include <stddef.h>
 #include <dt-bindings/zmk/hid_usage.h>
-#include <layout_swapping.h>
 
 struct layout_mapping {
     uint32_t keycode_from;
