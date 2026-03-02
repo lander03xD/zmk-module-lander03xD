@@ -8,7 +8,7 @@
 
 // Dependencies
 #include <zephyr/device.h>
-#include <zephyr/logging/log.h>
+//#include <zephyr/logging/log.h>
 #include <drivers/behavior.h>
 #include <zmk/behavior.h>
 #include <dt-bindings/zmk/keys.h>
@@ -18,7 +18,7 @@
 #include <layout_swapping.h>
 
 
-LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
+//LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 #if DT_HAS_COMPAT_STATUS_OKAY(DT_DRV_COMPAT)
 
@@ -45,42 +45,42 @@ struct morse_mapping {
 };
 
 static const struct morse_mapping morse_table[] = {
-    {".-", A},
-    {"-...", B},
-    {"-.-.", C},
-    {"-..", D},
-    {".", E},
-    {"..-.", F},
-    {"--.", G},
-    {"....", H},
-    {"..", I},
-    {".---", J},
-    {"-.-", K},
-    {".-..", L},
-    {"--", M},
-    {"-.", N},
-    {"---", O},
-    {".--.", P},
-    {"--.-", Q},
-    {".-.", R},
-    {"...", S},
-    {"-", T},
-    {"..-", U},
-    {"...-", V},
-    {".--", W},
-    {"-..-", X},
-    {"-.--", Y},
-    {"--..", Z},
-    {"-----", N0},
-    {".----", N1},
-    {"..---", N2},
-    {"...--", N3},
-    {"....-", N4},
-    {".....", N5},
-    {"-....",  N6},
-    {"--...", N7},
-    {"---..", N8},
-    {"----.", N9},
+    {".-", HID_USAGE_KEY_KEYBOARD_A},
+    {"-...", HID_USAGE_KEY_KEYBOARD_B},
+    {"-.-.", HID_USAGE_KEY_KEYBOARD_C},
+    {"-..", HID_USAGE_KEY_KEYBOARD_D},
+    {".", HID_USAGE_KEY_KEYBOARD_E},
+    {"..-.", HID_USAGE_KEY_KEYBOARD_F},
+    {"--.", HID_USAGE_KEY_KEYBOARD_G},
+    {"....", HID_USAGE_KEY_KEYBOARD_H},
+    {"..", HID_USAGE_KEY_KEYBOARD_I},
+    {".---", HID_USAGE_KEY_KEYBOARD_J},
+    {"-.-", HID_USAGE_KEY_KEYBOARD_K},
+    {".-..", HID_USAGE_KEY_KEYBOARD_L},
+    {"--", HID_USAGE_KEY_KEYBOARD_M},
+    {"-.", HID_USAGE_KEY_KEYBOARD_N},
+    {"---", HID_USAGE_KEY_KEYBOARD_O},
+    {".--.", HID_USAGE_KEY_KEYBOARD_P},
+    {"--.-", HID_USAGE_KEY_KEYBOARD_Q},
+    {".-.", HID_USAGE_KEY_KEYBOARD_R},
+    {"...", HID_USAGE_KEY_KEYBOARD_S},
+    {"-", HID_USAGE_KEY_KEYBOARD_T},
+    {"..-", HID_USAGE_KEY_KEYBOARD_U},
+    {"...-", HID_USAGE_KEY_KEYBOARD_V},
+    {".--", HID_USAGE_KEY_KEYBOARD_W},
+    {"-..-", HID_USAGE_KEY_KEYBOARD_X},
+    {"-.--", HID_USAGE_KEY_KEYBOARD_Y},
+    {"--..", HID_USAGE_KEY_KEYBOARD_Z},
+    {"-----", HID_USAGE_KEY_KEYBOARD_0_AND_RIGHT_PARENTHESIS},
+    {".----", HID_USAGE_KEY_KEYBOARD_1_AND_EXCLAMATION},
+    {"..---", HID_USAGE_KEY_KEYBOARD_2_AND_AT},
+    {"...--", HID_USAGE_KEY_KEYBOARD_3_AND_HASH},
+    {"....-", HID_USAGE_KEY_KEYBOARD_4_AND_DOLLAR},
+    {".....", HID_USAGE_KEY_KEYBOARD_5_AND_PERCENT},
+    {"-....",  HID_USAGE_KEY_KEYBOARD_6_AND_CARET},
+    {"--...", HID_USAGE_KEY_KEYBOARD_7_AND_AMPERSAND},
+    {"---..", HID_USAGE_KEY_KEYBOARD_8_AND_ASTERISK},
+    {"----.", HID_USAGE_KEY_KEYBOARD_9_AND_LEFT_PARENTHESIS},
 }; 
 
 static void emit_key(uint32_t keycode) {

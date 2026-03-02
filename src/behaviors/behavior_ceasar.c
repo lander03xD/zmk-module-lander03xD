@@ -15,8 +15,8 @@
 #include <dt-bindings/zmk/hid_usage.h>
 #include <layout_swapping.h>
 
-#include <zephyr/logging/log.h> //logging
-LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL); //logging
+//#include <zephyr/logging/log.h> //logging
+//LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL); //logging
 
 #if DT_HAS_COMPAT_STATUS_OKAY(DT_DRV_COMPAT)
 
@@ -32,18 +32,12 @@ static struct ceasar_state state = {
 .transforming = false };
 
 static uint32_t ceasar_transform(uint32_t keycode) {
-    LOG_DBG("Keycode: 0x%08" PRIx32, keycode);
-    LOG_DBG("Keycode: 0x%08" PRIx32, qwerty_to_dvorak(ZMK_HID_USAGE(HID_USAGE_KEY,keycode)));
-    uint32_t usage = ZMK_HID_USAGE_ID(qwerty_to_dvorak(ZMK_HID_USAGE(HID_USAGE_KEY,keycode)));
-
+    uint32_t usage = qwerty_to_dvorak(keycode);
     if (usage >= HID_USAGE_KEY_KEYBOARD_A && usage <= HID_USAGE_KEY_KEYBOARD_Z) {
         uint32_t offset = usage - HID_USAGE_KEY_KEYBOARD_A;
         uint32_t rotated = (offset + ROT) % 26;
         uint32_t new_usage = HID_USAGE_KEY_KEYBOARD_A + rotated;
-        
-        LOG_DBG("Keycode: 0x%08" PRIx32, ZMK_HID_USAGE(HID_USAGE_KEY,new_usage));
-        LOG_DBG("Keycode: 0x%08" PRIx32, qwerty_to_dvorak(keycode));
-        return dvorak_to_qwerty(ZMK_HID_USAGE(HID_USAGE_KEY,new_usage));
+        return dvorak_to_qwerty(new_usage);
     }
 
     return keycode;
@@ -70,6 +64,7 @@ static int ceasar_listener(const zmk_event_t *eh) {
     
     state.transforming = true;
     raise_zmk_keycode_state_changed_from_encoded(ceasar_transform(ev->keycode), ev->state, ev->timestamp);
+    //ev->keycode is the hid_usage and not keys
     state.transforming = false;
 
     return ZMK_EV_EVENT_HANDLED;
