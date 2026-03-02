@@ -33,8 +33,8 @@ static struct ceasar_state state = {
 
 static uint32_t ceasar_transform(uint32_t keycode) {
     LOG_DBG("Keycode: 0x%08" PRIx32, keycode);
-    LOG_DBG("Keycode: 0x%08" PRIx32, qwerty_to_dvorak(keycode));
-    uint32_t usage = ZMK_HID_USAGE_ID(qwerty_to_dvorak(keycode));
+    LOG_DBG("Keycode: 0x%08" PRIx32, qwerty_to_dvorak(ZMK_HID_USAGE(HID_USAGE_KEY,keycode)));
+    uint32_t usage = ZMK_HID_USAGE_ID(qwerty_to_dvorak(ZMK_HID_USAGE(HID_USAGE_KEY,keycode)));
 
     if (usage >= HID_USAGE_KEY_KEYBOARD_A && usage <= HID_USAGE_KEY_KEYBOARD_Z) {
         uint32_t offset = usage - HID_USAGE_KEY_KEYBOARD_A;
@@ -42,7 +42,7 @@ static uint32_t ceasar_transform(uint32_t keycode) {
         uint32_t new_usage = HID_USAGE_KEY_KEYBOARD_A + rotated;
         
         LOG_DBG("Keycode: 0x%08" PRIx32, ZMK_HID_USAGE(HID_USAGE_KEY,new_usage));
-        LOG_DBG("Keycode: 0x%08" PRIx32, dvorak_to_qwerty(ZMK_HID_USAGE(HID_USAGE_KEY,new_usage)));
+        LOG_DBG("Keycode: 0x%08" PRIx32, qwerty_to_dvorak(keycode));
         return dvorak_to_qwerty(ZMK_HID_USAGE(HID_USAGE_KEY,new_usage));
     }
 
