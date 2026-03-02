@@ -6,18 +6,17 @@
 
 #define DT_DRV_COMPAT zmk_behavior_ceasar
 
-#include <zephyr/logging/log.h>
 #include <drivers/behavior.h>
 #include <zmk/behavior.h>
-#include <dt-bindings/zmk/keys.h>
 #include <zmk/events/keycode_state_changed.h>
 #include <zmk/event_manager.h>
 #include <zmk/split/bluetooth/service.h>
 #include <zmk/hid.h>
-#include <dt-bindings/zmk/hid_usage.h>  // <-- Added for HID_USAGE_KEYBOARD_A/Z
+#include <dt-bindings/zmk/hid_usage.h>
 #include <layout_swapping.h>
 
-LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
+#include <zephyr/logging/log.h> //logging
+LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL); //logging
 
 #if DT_HAS_COMPAT_STATUS_OKAY(DT_DRV_COMPAT)
 
@@ -33,7 +32,7 @@ static struct ceasar_state state = {
 .transforming = false };
 
 static uint32_t ceasar_transform(uint32_t keycode) {
-
+    LOG_DBG("LANDER: ceasar_transform");
     uint32_t usage = ZMK_HID_USAGE_ID(qwerty_to_dvorak(keycode));
 
     if (usage >= HID_USAGE_KEY_KEYBOARD_A && usage <= HID_USAGE_KEY_KEYBOARD_Z) {
