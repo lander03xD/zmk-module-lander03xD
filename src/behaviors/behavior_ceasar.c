@@ -34,7 +34,7 @@ static struct ceasar_state state = {
 
 static uint32_t ceasar_transform(uint32_t keycode) {
 
-    uint32_t usage =  qwerty_to_dvorak(ZMK_HID_USAGE_ID(keycode));//this mapping isn't happening
+    uint32_t usage = ZMK_HID_USAGE_ID(qwerty_to_dvorak(keycode));
 
     if (usage >= HID_USAGE_KEY_KEYBOARD_A && usage <= HID_USAGE_KEY_KEYBOARD_Z) {
         uint32_t offset = usage - HID_USAGE_KEY_KEYBOARD_A;
