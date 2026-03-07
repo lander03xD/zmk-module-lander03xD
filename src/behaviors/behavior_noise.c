@@ -17,6 +17,7 @@
 #include <unistd.h>
 
 #include <zephyr/logging/log.h> //logging
+#include <zephyr/kernel.h>
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL); //logging
 
 #if DT_HAS_COMPAT_STATUS_OKAY(DT_DRV_COMPAT)
@@ -33,10 +34,9 @@ static struct noise_state state = {
 };
 
 static void emit_key(uint32_t hid_usage) {
-    raise_zmk_keycode_state_changed_from_encoded(hid_usage, true, state.last_event_timestamp);
-    // wait for 500ms
-    usleep(500000);
-    raise_zmk_keycode_state_changed_from_encoded(hid_usage, false, state.last_event_timestamp); 
+    int64_t ts = k_uptime_get();
+    raise_zmk_keycode_state_changed_from_encoded(hid_usage, true, ts);//todo this timestamp is causing issues. We need a timestamp somewhere ..
+    raise_zmk_keycode_state_changed_from_encoded(hid_usage, false, ts); 
 } 
 
 static void jiggle_now(void) {
