@@ -8,3 +8,8 @@ config ZMK_BEHAVIOR_CEASAR
     default y
     depends on DT_HAS_ZMK_BEHAVIOR_CEASAR_ENABLED
 
+config ZMK_BEHAVIOR_NOISE
+    bool
+    default y
+    depends on DT_HAS_ZMK_BEHAVIOR_NOISE_ENABLED
+
