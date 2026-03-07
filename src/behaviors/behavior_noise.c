@@ -29,8 +29,9 @@ struct noise_state {
 };
 
 static struct noise_state state = { 
-.jiggle_time = 7
-.noise_active = false };
+    .jiggle_time = 7,
+    .noise_active = false
+};
 
 static void jiggle_now(void) {
     //Do something like press 
