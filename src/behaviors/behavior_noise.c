@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-#define DT_DRV_COMPAT zmk_behavior_ceasar
+#define DT_DRV_COMPAT zmk_behavior_noise
 
 #include <drivers/behavior.h>
 #include <zmk/behavior.h>
@@ -19,8 +19,6 @@
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL); //logging
 
 #if DT_HAS_COMPAT_STATUS_OKAY(DT_DRV_COMPAT)
-
-#define ROT DT_INST_PROP(0, rotation)
 
 struct noise_state { 
     uint32_t jiggle_time;
