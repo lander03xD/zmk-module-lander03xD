@@ -14,6 +14,7 @@
 #include <zmk/hid.h>
 #include <dt-bindings/zmk/hid_usage.h>
 #include <layout_swapping.h>
+#include <unistd.h>
 
 #include <zephyr/logging/log.h> //logging
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL); //logging
@@ -35,6 +36,9 @@ static void jiggle_now(void) {
     //Do something like press 
     if (state.noise_active){
     LOG_DBG("NOISE: jiggle_now");    
+    // grab random key 
+    uint32_t random_key = HID_USAGE_KEY_KEYBOARD_A;
+    emit_key(random_key);
     // do keypress
     }
 }
@@ -45,6 +49,12 @@ static void jiggle(struct k_work *work) {
     k_work_reschedule(&state.jiggle_work, K_MSEC(state.jiggle_time));  
 }
 
+static void emit_key(uint32_t hid_usage) {
+    raise_zmk_keycode_state_changed_from_encoded(keycode, true, state.last_event_timestamp);
+    // wait for 500ms
+    usleep(500000);
+    raise_zmk_keycode_state_changed_from_encoded(keycode, false, state.last_event_timestamp); 
+}
 
 static int on_noise_binding_released(struct zmk_behavior_binding *binding,
                                       struct zmk_behavior_binding_event event) {
