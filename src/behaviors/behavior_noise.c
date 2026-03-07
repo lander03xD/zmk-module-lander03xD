@@ -33,10 +33,10 @@ static struct noise_state state = {
 };
 
 static void emit_key(uint32_t hid_usage) {
-    raise_zmk_keycode_state_changed_from_encoded(keycode, true, state.last_event_timestamp);
+    raise_zmk_keycode_state_changed_from_encoded(hid_usage, true, state.last_event_timestamp);
     // wait for 500ms
     usleep(500000);
-    raise_zmk_keycode_state_changed_from_encoded(keycode, false, state.last_event_timestamp); 
+    raise_zmk_keycode_state_changed_from_encoded(hid_usage, false, state.last_event_timestamp); 
 } 
 
 static void jiggle_now(void) {
