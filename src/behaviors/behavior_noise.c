@@ -27,7 +27,7 @@ struct noise_state {
 };
 
 static struct noise_state state = { 
-    .jiggle_time = 7,
+    .jiggle_time = 3000,
     .noise_active = false
 };
 
