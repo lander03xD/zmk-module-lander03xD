@@ -16,6 +16,7 @@
 #include <layout_swapping.h>
 #include <unistd.h>
 
+#include <zephyr/random/random.h>
 #include <zephyr/logging/log.h> //logging
 #include <zephyr/kernel.h>
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL); //logging
@@ -35,7 +36,7 @@ static struct noise_state state = {
 
 static void emit_key(uint32_t hid_usage) {
     int64_t ts = k_uptime_get();
-    raise_zmk_keycode_state_changed_from_encoded(hid_usage, true, ts);//todo this timestamp is causing issues. We need a timestamp somewhere ..
+    raise_zmk_keycode_state_changed_from_encoded(hid_usage, true, ts);
     raise_zmk_keycode_state_changed_from_encoded(hid_usage, false, ts); 
 } 
 
@@ -44,7 +45,9 @@ static void jiggle_now(void) {
     if (state.noise_active){
     LOG_DBG("NOISE: jiggle_now");    
     // grab random key 
-    uint32_t random_key = HID_USAGE_KEY_KEYBOARD_A;
+
+    uint32_t r = sys_rand32_get() % 26;
+    uint32_t random_key = HID_USAGE_KEY_KEYBOARD_A + r;//random keypress
     emit_key(random_key);
     // do keypress
     }
