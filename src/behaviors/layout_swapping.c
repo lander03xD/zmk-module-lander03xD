@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <dt-bindings/zmk/keys.h>
 
-static const uint32_t layout_QWERTY[] = {
+static const uint32_t layout_qwerty[] = {
     HID_USAGE_KEY_KEYBOARD_A, 
     HID_USAGE_KEY_KEYBOARD_B, 
     HID_USAGE_KEY_KEYBOARD_C, 
@@ -31,7 +31,7 @@ static const uint32_t layout_QWERTY[] = {
     HID_USAGE_KEY_KEYBOARD_Z,
 };
 
-static const uint32_t layout_DVORAK[] = {
+static const uint32_t layout_dvorak[] = {
     HID_USAGE_KEY_KEYBOARD_A,
     HID_USAGE_KEY_KEYBOARD_N,
     HID_USAGE_KEY_KEYBOARD_I,
