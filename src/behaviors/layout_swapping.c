@@ -60,8 +60,8 @@ static const uint32_t layout_DVORAK[] = {
     HID_USAGE_KEY_KEYBOARD_SLASH_AND_QUESTION_MARK,
 };
 
-uint32_t from_to(uint32_t from_layout[], uint32_t to_layout[], uint32_t hid_usage){
-    for (size_t i = 0; i < sizeof(from_layout)/sizeof(from_layout[0]); i++){
+uint32_t from_to(char from_layout[], char to_layout[], uint32_t hid_usage){
+    for (size_t i = 0; i < 26 ; i++){
         if(from_layout[i] == hid_usage){
             return to_layout[i];
         }
